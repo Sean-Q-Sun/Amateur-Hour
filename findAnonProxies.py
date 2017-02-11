@@ -37,13 +37,8 @@ for i in range(129,255):
                 except requests.exceptions.ConnectionError:
                     print "Connection Error, oh no!"
                 print"\n" 
-                 
-                 
-                 
-                 
-                 
-                 
-                 proxy_ip=s.get('https://ip.42.pl/raw',proxies={'http':url}).text
+"""
+                proxy_ip=s.get('https://ip.42.pl/raw',proxies={'http':url}).text
                 print proxy_ip
 #                s=requests.Session()
  
