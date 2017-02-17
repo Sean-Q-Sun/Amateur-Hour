@@ -12,14 +12,8 @@ def connection(host, port):
     return s
 
 def getItem(s):
-    item = "";
-    while True:
-        response = s.recv(1024)
-        if response:
-            item = response
-        break
-    item = item.split()[len(item.split())-1][:-1]
-    return item 
+    return s.recv(1024).split()[len(s.recv(1024).split())-1][:-1]
+
 
 def getFlag1(host, port):
     request = "POST / HTTP/1.1\n"
@@ -101,7 +95,6 @@ def getFlag4(host, port):
     login = "username=chaim" +"&password="+ urllib.quote_plus(password)+token
     cLength = "Content-Length: {}\n\n".format(len(login)-2)
  
-    print (request + reqHost + userAgent + accept + lang + encoding + cType + cLength + login)
     s.send(request + reqHost + userAgent + accept + lang + encoding + cType + cLength + login)
     
     return getItem(s)
