@@ -2,89 +2,72 @@
 import socket
 import urllib
 
-
-""" Connect to the host on the port
-"""
 def connection(host, port):
     s = socket.socket(
         socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
     return s
 
-def getItem(s):
-    item = "";
+"""Get the flag by doing a POST request
+"""
+def getFlag(host, port):
+    flag = ""
+    request = "POST / HTTP/1.1\n"
+    reqHost = "Host: 54.209.150.110\n\n"
+    s = connection(host,port)
+    s.send(request + reqHost)
     while True:
         response = s.recv(1024)
-        if response:
-            item = response
+        if response: 
+            flag = response
         break
-    item = item.split()[len(item.split())-1][:-1]
-    return item 
-
-def getFlag1(host, port):
-    request = "POST / HTTP/1.1\n"
-    reqHost = "Host: "+host+"\n\n"
-    s = connection (host, port)
-    s.send(request + reqHost)
-    return getItem(s)
+    flag = flag.split()[len(flag.split())-1][:-1]
     s.close()
+    return flag
 
-def getFlag2(host, port):
+def getToken(host, port):
+    token = ""
     request = "POST /getSecure HTTP/1.1\n"
-    reqHost = "Host: "+host+"\n"
-    s = connection(host, port)
-    s.send(request + reqHost +"Connection: keep-alive\n\n")
-    token = getItem(s)
-    s.close()
-
-    request = "POST /getFlag2 HTTP/1.1\n"
-    s = connection(host, port)
-
-    token = "token="+token+"\n\n"
-    cType = "Content-Type: application/x-www-form-urlencoded\n"
-    cLength = "Content-Length: {}\n\n".format(len(token)-2)
-    s.send(request + reqHost + cType + cLength + token)
-    return getItem(s)
-    s.close()
-
-def getFlag3(host, port):
-    request = "POST /getSecure HTTP/1.1\n"
-    reqHost = "Host: "+host+"\n"
-   s = connection(host,port)
-    s.send(request + reqHost + "Connection: keep-alive\n\n")
-    token = getItem(s)
-    s.close()
-
-    request = "POST /getFlag3Challenge HTTP/1.1\n"
-    reqHost = "Host: "+host+"\n"
+    reqHost = "Host: 54.209.150.110\n\n"
+    cLife = "Connection: keep-alive\n\n"
     s = connection(host,port)
-    
+    s.send(request + reqHost + cLife)
+    while True:
+        response = s.recv(1024)
+        if response: 
+            token = response
+        break
+    token = token.split()[len(token.split())-1][:-1]
+    s.close()
+    return token
+
+def getFlag2(host, port, token):
+    flag = ""
+    request = "POST /getFlag2 HTTP/1.1\n"
+    reqHost = "Host: "+host+"\n\n"
+    cLife = "Connection: keep-alive\n\n" 
     token = "token="+token+"\n\n"
     cType = "Content-Type: application/x-www-form-urlencoded\n"
     cLength = "Content-Length: {}\n\n".format(len(token)-2)
-    #print (request + reqHost + cType + cLength + token)
-    s.send(request + reqHost + cType + cLength + token)
+    s = connection(host,port)
+    s.send(request + reqHost + cType + cLength + cLife + token)
+    while True:
+        response = s.recv(1024)
+        print response
+        if response:
+            flag = response
+        break
+    flag = flag.split()[len(flag.split())-1][:1]
     s.close()
+    return flag
     
-    answer = eval(getItem(s))
-    print answer
-    solution = "solution=" + str(answer) + "\n\n"
-    print solution
-    token = "&token=" + token[6:]
-    cLength = "Content-Length: {}\n\n".format(len(token+solution)-2)
-     
-    print (request + reqHost + cType + cLength + token + solution)
-    s.send(request + reqHost + cType + cLength + token + solution)
-    return request
-
-
+        
 
 def main():
     host = '54.209.150.110'
     port = 80
-    print "Activity 1 Flag = " + getFlag1(host, port)
-    print "Activity 2 Flag = " + getFlag2(host, port)
-    
-    #print "Activity 3 Flag = " + i
-    getFlag3(host, port) 
+    print("Activity 1: " + getFlag(host, port))
+    print getToken(host, port)
+    print("Activity 2: " + getFlag2(host, port, getToken(host, port)))
+
 main()
