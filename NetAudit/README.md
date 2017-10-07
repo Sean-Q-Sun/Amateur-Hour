@@ -1,3 +1,5 @@
+#Tools  
+
 # DNS Enumeration
 ## tool: dnsEnum.ps1
 ### requires 'hostnames.txt'
@@ -6,9 +8,9 @@ This tool will look to see if the given hostnames has an IP address. If the host
 It reads from a file list 'hostnames.txt' which has one hostname per line.
 
 Usage:
-~~~~ 
-C:> dnsEnum.ps1 
-~~~~
+```
+$ dnsEnum.ps1 
+```
 
 # Pingsweep
 ## tool: pingSweep.ps1
@@ -18,14 +20,14 @@ It can take in two forms of arguments x.x.x.x - y.y.y.y or x.x.x.x/w.
 It will only print out an IP that responded to a ping!
 
 Usage:
-~~~~ 
+```
 $ .\pingSweep.sh 10.31.1.0-10.31.2.0
 $ .\pingSweep.sh 10.31.0.0/16
-~~~~
+```
 
 # OS Classification
 ## tool: osClasssifier.py
-### requires Scapy, ipList.txt
+### requires: Scapy, ipList.txt
 
 ### Setup scapy on your machine
 ```
@@ -37,9 +39,9 @@ sudo python3 setup.py install
 
 This will classify the OS of each IP given to it. It reads from a list of IPs and classifies the Operating System on those IPs based on the ping's TTL.
 
-~~~~
+```
 $ osClassifier.py ipList.txt
-~~~~
+```
 
 # Extra Tool - Subdomain Lister
 ## tool: sublister.ps1
@@ -47,6 +49,6 @@ $ osClassifier.py ipList.txt
 
 This will read from wordlist and take an argument for the target url. It will then print out which subdomains that exist along with their IP.
 
-~~~~
+```
 $ sublister.ps1 robinhood.com
-~~~~
+```
